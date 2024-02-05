@@ -46,11 +46,13 @@ annotate RiskService.Risks with @(
 			{
 				Value: impact,
 				Criticality: criticality
-			} ,{
-        $Type         : 'UI.DataFieldForAction',
-        Label         : 'Copy',
-        Action        : 'RiskService.CopyProduct'
-    } 
+			} ,
+			{
+				$Type         : 'UI.DataFieldForAction',
+				Label         : 'Copy',
+				Action        : 'RiskService.CopyProduct',
+				![@UI.IsCopyAction] : true
+			} 
 		],
 		Facets: [
 			{$Type: 'UI.ReferenceFacet', Label: 'Main', Target: '@UI.FieldGroup#Main'}
