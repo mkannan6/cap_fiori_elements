@@ -20,7 +20,8 @@
         "uri": "/odata/v4/service/risk/",
         "type": "OData",
         "settings": {
-          "annotations": [],
+          "annotations": [ 
+          ], 
           "odataVersion": "4.0"
         }
       }
