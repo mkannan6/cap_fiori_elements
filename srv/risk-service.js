@@ -1,27 +1,28 @@
 // Import necessary modules
 const cds = require('@sap/cds');
+const { v4: uuidv4 } = require('uuid');
 
-// Define the service handler function
+
 module.exports = cds.service.impl(async (srv) => {
-
-    // Function to handle the CopyProduct action
-    srv.on('CopyProduct', async (req) => {
-   
-        const { from } = req.params;
-
-        // Copy the product data
-        const newProduct = {
-            name: from.name + ' (Copy)', // Append '(Copy)' to the name
-            description: from.description, // Copy the description
-            price: from.price // Copy the price
-            // You can copy other fields as needed
-        };
-
-        // Create the new product in the database
-        const result = await srv.transaction(req).create('Risks', newProduct);
-
-        // Return the newly created product
-        return result;
+    const { Risks } = srv.entities;
+  
+    srv.on('CopyEntity', async (req) => {
+      const { ID } =  req.params[0];
+    
+      // Fetch the entity to copy
+      const entityToCopy = await srv.tx(req).run(SELECT.one(Risks).where({ ID }));
+ 
+      if (!entityToCopy) {
+        req.error(404, `Entity with ID ${ID} not found`);
+      }
+  
+      // Perform the deep copy
+      const copiedEntity = { ...entityToCopy, ID: uuidv4()}; // Assuming ID is a UUID field
+  
+      // Save the copied entity
+      await srv.tx(req).run(INSERT.into(Risks).entries(copiedEntity));
+ 
+      // Set the navigation target to the object page with the copied entity's ID
+      req.info.redirect = `../Risks/${copiedEntity.ID}`;
     });
-
-});
+  });

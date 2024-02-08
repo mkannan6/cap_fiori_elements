@@ -7,19 +7,7 @@ annotate RiskService.Risks with {
 	impact      @title: 'Impact';
 }
 
-
-annotate RiskService.Mitigations with {
-	ID @(
-		UI.Hidden,
-		Common: {
-		Text: description
-		}
-	);
-	description  @title: 'Description';
-	owner        @title: 'Owner';
-	timeline     @title: 'Timeline';
-	risks        @title: 'Risks';
-}
+ 
 
 annotate RiskService.Risks with @(
 	UI: {
@@ -50,7 +38,7 @@ annotate RiskService.Risks with @(
 			{
 				$Type         : 'UI.DataFieldForAction',
 				Label         : 'Copy',
-				Action        : 'RiskService.CopyProduct',
+				Action        : 'RiskService.CopyEntity',
 				![@UI.IsCopyAction] : true
 			} 
 		],
@@ -73,25 +61,4 @@ annotate RiskService.Risks with @(
 	},
 );  
 
-annotate RiskService.Risks with {
-	miti @(
-		Common: {
-			//show text, not id for mitigation in the context of risks
-			Text: miti.description  , TextArrangement: #TextOnly,
-			ValueList: {
-				Label: 'Mitigations',
-				CollectionPath: 'Mitigations',
-				Parameters: [
-					{ $Type: 'Common.ValueListParameterInOut',
-						LocalDataProperty: miti_ID,
-						ValueListProperty: 'ID'
-					},
-					{ $Type: 'Common.ValueListParameterDisplayOnly',
-						ValueListProperty: 'description'
-					}
-				]
-			}
-		}
-	);
-}
  
